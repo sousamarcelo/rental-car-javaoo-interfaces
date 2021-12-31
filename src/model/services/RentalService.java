@@ -43,11 +43,11 @@ public class RentalService {
 	public void processInvoice(RentalCar rentalCar) {
 		Long start = rentalCar.getStart().getTime();
 		Long finish = rentalCar.getFinish().getTime();
-		Double duration = (double) ((finish - start) / 1000 / 60 / 60);
-		Double basePayment;
+		double duration = (double) (finish - start) / 1000 / 60 / 60;
+		double basePayment;
 		
 		if (duration <= 12.0) {
-			basePayment = Math.ceil(duration)  * pricePerHour;
+			basePayment = Math.ceil(duration) * pricePerHour;
 		} else {
 			basePayment = Math.ceil(duration/24) * pricePerDay;
 		}
