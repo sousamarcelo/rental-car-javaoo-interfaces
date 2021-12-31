@@ -1,5 +1,8 @@
 package model.services;
 
+import model.entities.Invoice;
+import model.entities.RentalCar;
+
 public class RentalService {
 	
 	private Double pricePerHour;
@@ -36,5 +39,22 @@ public class RentalService {
 	public TaxService getTaxService() {
 		return taxService;
 	}	
+	
+	public void processInvoice(RentalCar rentalCar) {
+		Long start = rentalCar.getStart().getTime();
+		Long finish = rentalCar.getFinish().getTime();
+		Double duration = (double) ((finish - start) / 1000 / 60 / 60);
+		Double basePayment;
+		
+		if (duration <= 12.0) {
+			basePayment = Math.ceil(duration)  * pricePerHour;
+		} else {
+			basePayment = Math.ceil(duration/24) * pricePerDay;
+		}
+		
+		double tax = taxService.tax(basePayment);
+		
+		rentalCar.setInvoice(new Invoice(basePayment, tax));
+	}
 
 }
